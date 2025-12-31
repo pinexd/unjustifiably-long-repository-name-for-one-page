@@ -1,0 +1,59 @@
+
+<html>
+<head>
+    <style>
+        body { margin: 0; background-color: #111; overflow: hidden; }
+        #pearto { 
+            position: absolute; 
+            height: 123px; width: 76px; 
+            background: url(https://files.catbox.moe/ls57sn.png) no-repeat center; 
+            background-size: contain; 
+            will-change: transform;
+        }
+    </style>
+</head>
+<body>
+
+<div id="pearto"></div>
+
+<script>
+    const dvd = document.getElementById("pearto");
+    let x = 0, y = 0;
+    let dirX = 1, dirY = 1;
+    const speed = 2;
+
+    function animate() {
+        const screenW = window.innerWidth;
+        const screenH = window.innerHeight;
+        const dvdW = dvd.offsetWidth;
+        const dvdH = dvd.offsetHeight;
+
+        // Collision Logic
+        if (x + dvdW >= screenW) {
+            dirX = -1;
+            x = screenW - dvdW;
+        } else if (x <= 0) {
+            dirX = 1;
+            x = 0;
+        }
+
+        if (y + dvdH >= screenH) {
+            dirY = -1;
+            y = screenH - dvdH;
+        } else if (y <= 0) {
+            dirY = 1;
+            y = 0;
+        }
+
+        x += dirX * speed;
+        y += dirY * speed;
+
+        dvd.style.transform = `translate(${x}px, ${y}px)`;
+        requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+</script>
+
+</body>
+</html>
