@@ -1,4 +1,3 @@
-
 <html>
 <head>
     <style>
@@ -20,15 +19,30 @@
     const dvd = document.getElementById("pearto");
     let x = 0, y = 0;
     let dirX = 1, dirY = 1;
-    const speed = 2;
+    const speed = 3;
+    
+    let screenW, screenH, dvdW, dvdH;
 
-    function animate() {
-        const screenW = window.innerWidth;
-        const screenH = window.innerHeight;
-        const dvdW = dvd.offsetWidth;
-        const dvdH = dvd.offsetHeight;
+    function updateDimensions() {
+        screenW = window.innerWidth;
+        screenH = window.innerHeight;
+        dvdW = dvd.offsetWidth;
+        dvdH = dvd.offsetHeight;
+    }
 
-        // Collision Logic
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+
+    let lastTime = 0;
+    function animate(currentTime) {
+        if (!lastTime) lastTime = currentTime;
+        const deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+
+        // six sevennn
+        const timeScale = deltaTime / 16.67;
+
+        // collision logic
         if (x + dvdW >= screenW) {
             dirX = -1;
             x = screenW - dvdW;
@@ -45,15 +59,14 @@
             y = 0;
         }
 
-        x += dirX * speed;
-        y += dirY * speed;
-
-        dvd.style.transform = `translate(${x}px, ${y}px)`;
+        x += dirX * speed * timeScale;
+        y += dirY * speed * timeScale;
+        dvd.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        
         requestAnimationFrame(animate);
     }
 
     requestAnimationFrame(animate);
 </script>
-
 </body>
 </html>
