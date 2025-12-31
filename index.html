@@ -1,13 +1,23 @@
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pearto is here</title>
     <style>
-        body { margin: 0; background-color: #111; overflow: hidden; }
+        body { 
+            margin: 0; 
+            background-color: #111; 
+            overflow: hidden; 
+            touch-action: none; 
+        }
         #pearto { 
             position: absolute; 
-            height: 123px; width: 76px; 
+            height: 123px; 
+            width: 76px; 
             background: url(https://files.catbox.moe/ls57sn.png) no-repeat center; 
             background-size: contain; 
             will-change: transform;
+            pointer-events: none; 
         }
     </style>
 </head>
@@ -17,10 +27,12 @@
 
 <script>
     const dvd = document.getElementById("pearto");
+    const speed = 4;
+    
     let x = 0, y = 0;
     let dirX = 1, dirY = 1;
-    const speed = 3;
-    
+    let lastTime = 0;
+
     let screenW, screenH, dvdW, dvdH;
 
     function updateDimensions() {
@@ -33,14 +45,19 @@
     updateDimensions();
     window.addEventListener('resize', updateDimensions);
 
-    let lastTime = 0;
     function animate(currentTime) {
-        if (!lastTime) lastTime = currentTime;
-        const deltaTime = currentTime - lastTime;
+        if (!lastTime) {
+            lastTime = currentTime;
+            requestAnimationFrame(animate);
+            return;
+        }
+
+        const deltaTimeMs = Math.min(currentTime - lastTime, 100);
+        const timeScale = deltaTimeMs / 16.67;
         lastTime = currentTime;
 
-        // six sevennn
-        const timeScale = deltaTime / 16.67;
+        x += dirX * speed * timeScale;
+        y += dirY * speed * timeScale;
 
         // collision logic
         if (x + dvdW >= screenW) {
@@ -59,14 +76,13 @@
             y = 0;
         }
 
-        x += dirX * speed * timeScale;
-        y += dirY * speed * timeScale;
         dvd.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-        
+
         requestAnimationFrame(animate);
     }
 
     requestAnimationFrame(animate);
 </script>
+
 </body>
 </html>
